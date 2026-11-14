@@ -1,0 +1,6 @@
+{
+  "name": "NammaPG Bangalore",
+  "description": "Mobile-first Paying Guest community, smart meal QR pass, live laundry tracker, and kitchen dashboard powered by Google Sheets & Apps Script.",
+  "requestFramePermissions": ["camera"],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

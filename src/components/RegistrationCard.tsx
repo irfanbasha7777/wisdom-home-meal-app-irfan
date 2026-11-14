@@ -1,24 +1,20 @@
 import React, { useMemo, useState } from 'react';
-import { Check, ChevronDown, Database, Lock, LogIn, Search, UserPlus } from 'lucide-react';
+import { Check, ChevronDown, Lock, LogIn, Search, UserPlus } from 'lucide-react';
 import { PG_ROOMS } from '../data/rooms';
 import { Resident } from '../types';
 import { AddToHomeBanner } from './AddToHomeBanner';
 
 interface RegistrationCardProps {
   residents: Resident[];
-  demoMode: boolean;
   onRegister: (payload: { fullName: string; roomNumber: string; mobile: string }) => Promise<void>;
   onSignIn: (mobile: string) => void;
-  onOpenSetup: () => void;
   onOpenAdminLogin: () => void;
 }
 
 export const RegistrationCard: React.FC<RegistrationCardProps> = ({
   residents,
-  demoMode,
   onRegister,
   onSignIn,
-  onOpenSetup,
   onOpenAdminLogin,
 }) => {
   const [mode, setMode] = useState<'register' | 'signin'>('register');
@@ -96,18 +92,10 @@ export const RegistrationCard: React.FC<RegistrationCardProps> = ({
         <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 lg:gap-8 items-start">
           {/* Left Info Column (No PG logo) */}
           <div className="lg:col-span-5 space-y-5 sm:space-y-6 pt-1 order-2 lg:order-1">
-            <div className="hidden lg:flex flex-wrap items-center justify-between gap-2">
+            <div className="hidden lg:flex items-center justify-between gap-2">
               <span className="text-xl font-semibold tracking-tight text-[#202124]">
                 Wisdom Home JP Nagar
               </span>
-              <button
-                type="button"
-                onClick={onOpenSetup}
-                className="inline-flex items-center gap-1.5 px-3 py-2 rounded-xl text-xs font-medium text-[#1A73E8] bg-[#E8F0FE] hover:bg-[#D2E3FC] transition-colors whitespace-nowrap"
-              >
-                <Database className="w-3.5 h-3.5" />
-                {demoMode ? 'Demo Mode · Connect Sheet' : 'Google Sheet Connected'}
-              </button>
             </div>
 
             <div className="hidden lg:block space-y-3">
@@ -178,23 +166,13 @@ export const RegistrationCard: React.FC<RegistrationCardProps> = ({
 
           {/* Right 3-Field Registration Card (appears first on mobile right under brand bar) */}
           <div className="lg:col-span-7 order-1 lg:order-2 space-y-4">
-            <div className="lg:hidden flex flex-wrap items-center justify-between gap-2 px-1">
-              <div>
-                <div className="text-lg font-semibold tracking-tight text-[#202124]">
-                  Wisdom Home JP Nagar
-                </div>
-                <div className="text-xs text-[#5F6368]">
-                  Resident Check-In, Meals &amp; Laundry
-                </div>
+            <div className="lg:hidden px-1">
+              <div className="text-lg font-semibold tracking-tight text-[#202124]">
+                Wisdom Home JP Nagar
               </div>
-              <button
-                type="button"
-                onClick={onOpenSetup}
-                className="min-h-[38px] inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl text-xs font-medium text-[#1A73E8] bg-[#E8F0FE] hover:bg-[#D2E3FC] transition-colors whitespace-nowrap"
-              >
-                <Database className="w-3.5 h-3.5" />
-                {demoMode ? 'Demo · Connect Sheet' : 'Sheet Live'}
-              </button>
+              <div className="text-xs text-[#5F6368]">
+                Resident Check-In, Meals &amp; Laundry
+              </div>
             </div>
 
             <div className="bg-white border border-[#E0E3E7] rounded-3xl p-4 sm:p-8 shadow-[0_1px_3px_rgba(60,64,67,0.08)]">

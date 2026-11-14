@@ -2,7 +2,6 @@ import { useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import {
   Bell,
   BellOff,
-  Database,
   LogOut,
   Newspaper,
   RefreshCw,
@@ -523,10 +522,8 @@ export default function App() {
       {!activeResident && !isStaffOnlyView ? (
         <RegistrationCard
           residents={pgState?.residents || []}
-          demoMode={settings.demoMode}
           onRegister={handleRegister}
           onSignIn={handleSignIn}
-          onOpenSetup={() => setSetupOpen(true)}
           onOpenAdminLogin={() => setAdminLoginOpen(true)}
         />
       ) : (
@@ -615,22 +612,10 @@ export default function App() {
                 <button
                   type="button"
                   onClick={() => refreshState(settings)}
-                  aria-label="Sync with Google Sheet"
+                  aria-label="Refresh Data"
                   className="min-h-[38px] min-w-[36px] sm:min-h-[40px] sm:min-w-[40px] flex items-center justify-center rounded-xl text-[#5F6368] hover:bg-[#F1F3F4] transition-colors"
                 >
                   <RefreshCw className={`w-4 h-4 ${syncing ? 'animate-spin text-[#1A73E8]' : ''}`} />
-                </button>
-
-                <button
-                  type="button"
-                  onClick={() => setSetupOpen(true)}
-                  aria-label="Google Sheets Setup"
-                  className="min-h-[38px] min-w-[36px] sm:min-w-0 px-2 sm:px-3 rounded-xl border border-[#DADCE0] hover:bg-[#F8F9FA] text-xs font-medium text-[#1A73E8] inline-flex items-center justify-center gap-1.5 whitespace-nowrap"
-                >
-                  <Database className="w-3.5 h-3.5" />
-                  <span className="hidden sm:inline">
-                    {settings.demoMode ? 'Demo Mode' : 'Sheet Live'}
-                  </span>
                 </button>
 
                 {activeResident && (
@@ -654,14 +639,16 @@ export default function App() {
 
             {syncError && (
               <div className="mb-4 p-3.5 rounded-2xl bg-[#FCE8E6] border border-[#F6AEA9] text-xs sm:text-sm text-[#A50E0E] flex items-center justify-between gap-3">
-                <span>Google Sheet sync warning: {syncError}</span>
-                <button
-                  type="button"
-                  onClick={() => setSetupOpen(true)}
-                  className="text-xs font-semibold underline whitespace-nowrap"
-                >
-                  Check Setup
-                </button>
+                <span>Sync warning: {syncError}</span>
+                {adminSession?.authenticated && (
+                  <button
+                    type="button"
+                    onClick={() => setSetupOpen(true)}
+                    className="text-xs font-semibold underline whitespace-nowrap"
+                  >
+                    Check Setup
+                  </button>
+                )}
               </div>
             )}
 
@@ -736,6 +723,8 @@ export default function App() {
                   dailyMeals={pgState.dailyMeals}
                   announcements={pgState.announcements || []}
                   busyKey={busyAction}
+                  demoMode={settings.demoMode}
+                  onOpenSetup={() => setSetupOpen(true)}
                   onLockAdmin={handleLockAdmin}
                   onCheckInMeal={handleCheckInMeal}
                   onReconcileMeal={handleReconcileMeal}

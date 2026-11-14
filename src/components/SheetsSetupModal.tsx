@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Check, Copy, ExternalLink, RefreshCw, RotateCcw, X } from 'lucide-react';
+import { normalizeSheetsUrl } from '../config/backend';
 import { APPS_SCRIPT_CODE } from '../data/appsScriptCode';
 import { AppSettings } from '../types';
 
@@ -45,24 +46,26 @@ export const SheetsSetupModal: React.FC<SheetsSetupModalProps> = ({
 
   const handleTestAndSave = async () => {
     setStatusMsg(null);
-    if (!demoMode && !urlInput.trim().startsWith('https://script.google.com/')) {
+    const normalizedUrl = normalizeSheetsUrl(urlInput);
+    if (!demoMode && !normalizedUrl.startsWith('https://script.google.com/')) {
       setStatusMsg({
         type: 'err',
-        text: 'Enter a valid Google Apps Script Web App URL starting with https://script.google.com/',
+        text: 'Enter a valid Google Apps Script Web App URL (https://script.google.com/...) or Deployment ID (AKfycb...).',
       });
       return;
     }
 
     if (demoMode) {
-      onSaveSettings({ ...settings, webAppUrl: urlInput.trim(), demoMode: true });
+      onSaveSettings({ ...settings, webAppUrl: normalizedUrl, demoMode: true });
       setStatusMsg({ type: 'ok', text: 'Demo / Offline Fallback Mode enabled.' });
       return;
     }
 
     setTesting(true);
     try {
-      await onTestConnection(urlInput.trim());
-      onSaveSettings({ ...settings, webAppUrl: urlInput.trim(), demoMode: false });
+      await onTestConnection(normalizedUrl);
+      setUrlInput(normalizedUrl);
+      onSaveSettings({ ...settings, webAppUrl: normalizedUrl, demoMode: false });
       setStatusMsg({
         type: 'ok',
         text: 'Connected! Your Google Sheet tabs (Residents, DailyMeals, LaundryStatus, Alerts, ActivityLog, Announcements) are live.',

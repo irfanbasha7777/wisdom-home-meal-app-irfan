@@ -140,9 +140,7 @@ export const ProfilePage: React.FC<ProfilePageProps> = ({
               Resident Profile &amp; History
             </h1>
             <p className="text-xs sm:text-sm text-[#5F6368]">
-              {demoMode
-                ? 'Wisdom Home JP Nagar · Local Demo Sheet store'
-                : 'Wisdom Home JP Nagar · Synced from Google Sheets'}
+              Wisdom Home JP Nagar · Resident Account &amp; Activity
             </p>
           </div>
         </div>

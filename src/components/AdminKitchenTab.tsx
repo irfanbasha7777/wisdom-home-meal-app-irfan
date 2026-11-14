@@ -6,6 +6,7 @@ import {
   Camera,
   CameraOff,
   CheckCircle2,
+  Database,
   Lock,
   Megaphone,
   Newspaper,
@@ -31,6 +32,8 @@ interface AdminKitchenTabProps {
   dailyMeals: DailyMealRecord[];
   announcements: AnnouncementItem[];
   busyKey: string | null;
+  demoMode: boolean;
+  onOpenSetup: () => void;
   onLockAdmin: () => void;
   onCheckInMeal: (mobile: string, mealType: MealType) => Promise<void>;
   onReconcileMeal: (mealType: MealType) => Promise<void>;
@@ -68,6 +71,8 @@ export const AdminKitchenTab: React.FC<AdminKitchenTabProps> = ({
   dailyMeals,
   announcements,
   busyKey,
+  demoMode,
+  onOpenSetup,
   onLockAdmin,
   onCheckInMeal,
   onReconcileMeal,
@@ -367,6 +372,15 @@ export const AdminKitchenTab: React.FC<AdminKitchenTabProps> = ({
           >
             <Megaphone className="w-4 h-4" />
             {extraFoodSent ? 'Extra Food Alert Sent' : 'Broadcast Extra Food Alert'}
+          </button>
+
+          <button
+            type="button"
+            onClick={onOpenSetup}
+            className="min-h-[44px] px-4 py-2 rounded-xl border border-[#DADCE0] bg-white hover:bg-[#F8F9FA] text-[#1A73E8] text-sm font-medium inline-flex items-center gap-2 whitespace-nowrap transition-colors"
+          >
+            <Database className="w-4 h-4" />
+            {demoMode ? 'Connect Google Sheet' : 'Sheet Connected'}
           </button>
 
           <button

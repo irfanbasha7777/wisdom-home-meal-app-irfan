@@ -9,6 +9,7 @@ import {
   TerraceStatus,
 } from '../types';
 import { createDemoSeed, getTodayISTDate } from '../data/demoSeed';
+import { normalizeSheetsUrl, PERMANENT_SHEETS_URL } from '../config/backend';
 
 const SETTINGS_KEY = 'wisdom_settings_v1';
 const DEMO_STATE_KEY = 'wisdom_demo_state_v1';
@@ -19,9 +20,16 @@ export function loadSettings(): AppSettings {
     const raw = localStorage.getItem(SETTINGS_KEY);
     if (raw) {
       const parsed = JSON.parse(raw);
+      const savedUrl = normalizeSheetsUrl(String(parsed.webAppUrl || ''));
+      const effectiveUrl = savedUrl || PERMANENT_SHEETS_URL;
       return {
-        webAppUrl: String(parsed.webAppUrl || ''),
-        demoMode: parsed.demoMode !== undefined ? Boolean(parsed.demoMode) : !parsed.webAppUrl,
+        webAppUrl: effectiveUrl,
+        demoMode:
+          effectiveUrl
+            ? parsed.webAppUrl
+              ? Boolean(parsed.demoMode)
+              : false
+            : true,
         activeMobile: String(parsed.activeMobile || ''),
       };
     }
@@ -29,8 +37,8 @@ export function loadSettings(): AppSettings {
     // ignore storage errors
   }
   return {
-    webAppUrl: '',
-    demoMode: true,
+    webAppUrl: PERMANENT_SHEETS_URL,
+    demoMode: !PERMANENT_SHEETS_URL,
     activeMobile: '',
   };
 }
